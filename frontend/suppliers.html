@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="p-5 rounded-4" style="background:url('https//images.unsplash.com/photo-1581090700227-1e37b190418e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;">
+  <div class="bg-white bg-opacity-25 p-4 rounded-4">
+    <h2 class="text-center text-white fw-bold mb-4"><i class="bi bi-truck"></i> Our Suppliers</h2>
+   <div class="card p-3 mb-4 shadow-sm" style="background: rgba(255,255,255,0.9); border-radius: 15px;">
+    <h5 class="fw-bold text-primary">📁 Bulk Upload Suppliers (CSV)</h5>
+    <form action="/upload_csv_suppliers" method="POST" enctype="multipart/form-data" class="d-flex align-items-center gap-3 mt-2">
+        <input type="file" name="csv_file" class="form-control w-50" accept=".csv" required>
+        <button type="submit" class="btn btn-success fw-bold">Upload Suppliers</button>
+    </form>
+    <small class="text-muted mt-2">*CSV Columns must be: <b>sname, sphone, saddress</b></small>
+</div>
+   
+    <div class="row g-4">
+      {% for sup in suppliers %}
+      <div class="col-md-4">
+        <div class="card text-center p-4 border-0 shadow" style="backdrop-filter:blur(6px);background:rgba(255,255,255,0.7);">
+          <img src="https://cdn-icons-png.flaticon.com/512/4320/4320342.png" width="60" class="mx-auto mb-3">
+          <h5 class="fw-bold">{{ sup.sname }}</h5>
+          <p class="mb-1 text-muted">{{ sup.saddress }}</p>
+          <p class="text-primary"><i class="bi bi-telephone"></i> {{ sup.sphone }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

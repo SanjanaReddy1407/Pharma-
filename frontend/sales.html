@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="p-5 rounded-4"
+  style="background:url('https://images.unsplash.com/photo-1581093448798-5a96686e1d2d?auto=format&fit=crop&w=1600&q=80')
+  center/cover no-repeat;">
+  <div class="bg-dark bg-opacity-50 p-4 rounded-4 text-white">
+    <h2 class="text-center fw-bold mb-4">
+      <i class="bi bi-bar-chart-line"></i> Sales Summary
+    </h2>
+
+    <!-- Summary cards -->
+    <div class="row text-center mb-5">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <div class="card bg-success bg-opacity-75 border-0 text-white p-4">
+          <h5>Total Sales</h5>
+          <h2>₹{{ sales.total_sales or 0 }}</h2>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card bg-info bg-opacity-75 border-0 text-white p-4">
+          <h5>Total Orders</h5>
+          <h2>{{ sales.total_orders or 0 }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card bg-light bg-opacity-75 border-0 p-4">
+      <h4 class="text-center text-dark mb-3">Top Selling Medicines</h4>
+      <canvas id="salesChart" height="120"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('salesChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [{% for med in top_medicines %}'{{ med.medicine_name }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: [{% for med in top_medicines %}{{ med.total_revenue }}{% if not loop.last %}, {% endif %}{% endfor %}],
+        backgroundColor: ['#a6c0fe','#43e97b','#fa709a','#ff758c','#4facfe'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+</script>
+{% endblock %}
