@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 shadow-lg bg-light bg-opacity-75 border-0 rounded-4">
+  <h2 class="text-center text-dark fw-bold mb-4">📊 Stock Value by Category</h2>
+  
+  <div class="table-responsive">
+    <table class="table table-hover text-center align-middle shadow-sm rounded">
+      <thead class="table-dark">
+        <tr>
+          <th>Category</th>
+          <th>Total Stock Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in data %}
+        <tr>
+          <td class="fw-bold text-primary">{{ c.category }}</td>
+          <td class="text-success fw-bold">₹{{ c.Total_Value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="text-center mt-3">
+    <a href="/" class="btn btn-outline-secondary">⬅ Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-white fw-bold mb-4">👥 Customer Management</h2>
+
+<div class="card p-3 mb-4 shadow-sm" style="background: rgba(255,255,255,0.9); border-radius: 15px;">
+    <h5 class="fw-bold text-primary">📁 Bulk Upload Customers (CSV)</h5>
+    <form action="/upload_csv_customers" method="POST" enctype="multipart/form-data" class="d-flex align-items-center gap-3 mt-2">
+        <input type="file" name="csv_file" class="form-control w-50" accept=".csv" required>
+        <button type="submit" class="btn btn-success fw-bold">Upload Customers</button>
+    </form>
+    <small class="text-muted mt-2">*CSV Columns must be: <b>cname, caddress, cphone</b></small>
+</div>
+
+<div class="text-end mb-4">
+  <button class="btn btn-light fw-bold" data-bs-toggle="collapse" data-bs-target="#addCustomerForm">
+    ➕ Add Customer
+  </button>
+</div>
+
+<div id="addCustomerForm">
+  <form action="/add_customer" method="POST" class="card p-4 mb-4 shadow-lg bg-light">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <input type="text" name="cname" class="form-control" placeholder="Customer Name" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="caddress" class="form-control" placeholder="Address" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="cphone" class="form-control" placeholder="Phone Number" required>
+      </div>
+      <div class="col-md-12 text-end">
+        <button type="submit" class="btn btn-success px-4">Add</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-lg bg-light bg-opacity-50 border-0">
+  <h4 class="text-center mb-3">Registered Customers</h4>
+  {% if customers %}
+  <table class="table table-hover text-center align-middle shadow-sm rounded">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in customers %}
+      <tr>
+        <td>{{ c.cid }}</td>
+        <td>{{ c.cname }}</td>
+        <td>{{ c.caddress }}</td>
+        <td>{{ c.cphone }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="text-center text-muted">No customers found.</p>
+  {% endif %}
+</div>
+
+{% if audit %}
+<div class="card p-3 shadow-lg bg-light bg-opacity-50 border-0 mt-4">
+  <h4 class="text-center mb-3">📜 Customer Audit Log</h4>
+  <table class="table table-hover text-center align-middle shadow-sm rounded">
+    <thead class="table-secondary">
+      <tr>
+        <th>Customer ID</th>
+        <th>Action</th>
+        <th>Action Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in audit %}
+      <tr>
+        <td>{{ a.customer_id }}</td>
+        <td>{{ a.action }}</td>
+        <td>{{ a.action_time }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}
