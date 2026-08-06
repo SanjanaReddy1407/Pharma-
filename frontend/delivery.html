@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-white fw-bold mb-4">🚚 Delivery Management</h2>
+<div class="card p-3 mb-4 shadow-sm" style="background: rgba(255,255,255,0.9); border-radius: 15px;">
+    <h5 class="fw-bold text-primary">📁 Bulk Upload Delivery Agents (CSV)</h5>
+    <form action="/upload_csv_delivery" method="POST" enctype="multipart/form-data" class="d-flex align-items-center gap-3 mt-2">
+        <input type="file" name="csv_file" class="form-control w-50" accept=".csv" required>
+        <button type="submit" class="btn btn-success fw-bold">Upload Agents</button>
+    </form>
+    <small class="text-muted mt-2">*CSV Columns must be: <b>dname, daddress, dphone, registration</b></small>
+</div>
+<div class="text-end mb-4">
+  <button class="btn btn-light fw-bold" data-bs-toggle="collapse" data-bs-target="#addDeliveryForm">
+    ➕ Add Delivery Person
+  </button>
+</div>
+
+<!-- 💡 Add Delivery Person Form -->
+<div class="collapse" id="addDeliveryForm">
+  <form action="/add_delivery" method="POST" class="card p-4 mb-4 shadow-lg bg-light">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <input type="text" name="dname" class="form-control" placeholder="Full Name" required>
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="dphone" class="form-control" placeholder="Phone Number" required>
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="daddress" class="form-control" placeholder="Address" required>
+      </div>
+      <!-- BUG FIX: Added missing registration date field -->
+      <div class="col-md-3">
+        <input type="date" name="registration" class="form-control" required title="Registration Date">
+      </div>
+      <div class="col-md-12 text-end">
+        <button type="submit" class="btn btn-success px-4">Add</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- 🏍️ Delivery Cards -->
+<div class="row g-4">
+  {% for d in data %}
+  <div class="col-md-4">
+    <div class="card p-3 text-center shadow-lg border-0" style="background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); border-radius: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/826/826070.png" width="80" class="mx-auto mb-3" style="animation: float 3s ease-in-out infinite;">
+      <h5 class="fw-bold text-dark">{{ d.dname }}</h5>
+      <p class="text-muted mb-1"><i class="bi bi-telephone"></i> {{ d.dphone }}</p>
+      <p><i class="bi bi-geo-alt"></i> {{ d.daddress }}</p>
+      <p class="text-muted"><i class="bi bi-calendar"></i> Registered: {{ d.registration }}</p>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center text-white mt-5">
+    <h5>No delivery personnel added yet.</h5>
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  transition: all 0.3s ease-in-out;
+}
+</style>
+
+{% endblock %}
